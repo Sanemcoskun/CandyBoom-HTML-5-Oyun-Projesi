@@ -3,7 +3,7 @@ Oyunumuz bir şeker ve meyve toplama oyunudur. Öncelikle karakter seçimi yapı
 
 **Test Edin:** https://sanemcoskun.com/candy-boom/
 
-**Youtube Tanıtımı:** https://www.youtube.com/watch?v=0la0LIq_6PU
+**Youtube Tanıtımı:** https://www.youtube.com/watch?v=0HxwOWDBSCU
 
 ## Oyuna Giriş Ekranı
 Oyuna ilk girildiğinde rekor tablosu ve oyunun nasıl oynandığına dair bilgiler yer almaktadır. Rekor tablomuzdaki veriler çerez olarak tutulmaktadır. Seçtiğimiz karakterin rekor puanı için bir çerez oluşturulur ve o çerezdeki veriler çekilerek tabloya işlenir.
