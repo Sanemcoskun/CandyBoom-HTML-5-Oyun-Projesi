@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta charset="UTF-8"/>
+    <title>toplanacak Catcher Game</title>
+
+    <style>
+
+      .ortala {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      canvas {
+        border: 5px solid white;
+        background: url('images/seker-bg.jpg');
+      }
+
+      body {
+        background: #212121;
+        font-family: Arial;
+      }
+
+      #tanitim{
+        border: 5px solid white;
+        background: url('images/seker-bg.jpg');
+        width: 750px; 
+        height: 750px;
+        overflow: auto;
+      }
+
+      .oynaButon{
+        background: #ffba00;
+        border: 0px solid;
+        color: #533d00;
+        padding: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        min-width: 100px;
+        cursor: pointer;
+      }
+
+      .oynaButon:hover{
+        background: #533d00;
+        color: #ffba00;
+      }
+
+      .youtubeButon{
+        background: #c00000;
+        border: 0px solid;
+        color: #fff;
+        padding: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        min-width: 100px;
+        cursor: pointer;
+      }
+
+      .youtubeButon:hover{
+        background: #fff;
+        color: #c00000;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <canvas class="ortala" id="oyun" width="750" height="750" style="display: none;"></canvas>
+
+    <div class="ortala" id="tanitim"><!--Oyun tanıtım kısmı-->
+
+      <table style="width: 100%; margin-bottom: 20px;">
+
+        <tr>
+          <td align="center" style="padding: 20px;"><img src="images/candy-logo-min.png" width="350"></td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding: 10px;">
+            <table border="1" style="border: 2px dotted #fff; width: 50%; color: #fff; border-radius: 10px;" cellpadding="4">
+              <thead>
+                <tr>
+                  <th colspan="3">REKORLAR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><img src="images/karakter-1.png" style="width: 30px; height: 30px;"></td>
+                  <td>Kerem</td>
+                  <td><text id="puan_0">0</text> Puan</td>
+                </tr>
+                <tr>
+                  <td><img src="images/karakter-2.png" style="width: 30px; height: 30px;"></td>
+                  <td>Sanem</td>
+                  <td><text id="puan_1">0</text> Puan</td>
+                </tr>
+                <tr>
+                  <td><img src="images/karakter-3.png" style="width: 30px; height: 30px;"></td>
+                  <td>Abdullah</td>
+                  <td><text id="puan_2">0</text> Puan</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding: 30px;"><button class="oynaButon" onclick="oyunuGoster();">OYNA</button></td>
+        </tr>
+
+        <tr>
+          <td align="center">
+            <table style="width: 90%; background: rgba(0, 0, 0, 0.5); color: #fff; border-radius: 10px;">
+              <tr>
+                <td colspan="2">
+                  <h2 style="text-align: center;">Nasıl Oynanır?</h2>
+                  <p style="padding: 0px; text-align: center;">
+                    <a href="#" target="_blank"><button class="youtubeButon">Youtube Tanıtımı</button></a>
+                  </p>
+                  <p style="font-size: 15px; padding: 20px; padding-bottom: 10px; padding-top: 10px; text-align: justify;">Oyunumuz bir şeker ve meyve toplama oyunudur. Öncelikle karakter seçimi yapılır. Oyunda 3 farklı karakter bulunmaktadır. Karakterlerin herhangi bir özelliği yoktur. Ekranda her saniye rastgele bir konumda bir nesne oluşacaktır. Her nesne 7 saniye boyunca toplanabilir. Oyunda 2 farklı seviye ve her seviyede farklı nesneler bulunmaktadır.</p>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" width="50%">
+                  <table style="width: 90%; border: 1px dotted #fff; text-align: center;" border="2" cellpadding="3">
+                    <tr>
+                      <th colspan="2" style="padding: 20px;">SEVİYE 1 (0 puan)</th>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px;">Nesne</td>
+                      <td style="padding: 10px;">Puan</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/elma.png" style="width: 40px;"></td>
+                      <td>20</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/muz.png" style="width: 40px;"></td>
+                      <td>30</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/armut.png" style="width: 40px;"></td>
+                      <td>40</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/karpuz.png" style="width: 40px;"></td>
+                      <td>50</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/ananas.png" style="width: 40px;"></td>
+                      <td>60</td>
+                    </tr>
+                  </table>
+                </td>
+                <td align="center" width="50%">
+                  <table style="width: 90%; border: 1px dotted #fff; text-align: center;" border="2" cellpadding="3">
+                    <tr>
+                      <th colspan="2" style="padding: 20px;">SEVİYE 2 (1000 puan)</th>
+                    </tr>
+                    <tr>
+                      <td style="padding: 10px;">Nesne</td>
+                      <td style="padding: 10px;">Puan</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/seker-1.png" style="width: 40px;"></td>
+                      <td>30</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/seker-2.png" style="width: 40px;"></td>
+                      <td>50</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/seker-3.png" style="width: 40px;"></td>
+                      <td>70</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/seker-4.png" style="width: 40px;"></td>
+                      <td>90</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/seker-5.png" style="width: 40px;"></td>
+                      <td>120</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <h3 style="text-align: center;">Canlar ve Bombalar</h3>
+                  <p style="font-size: 15px; padding: 20px; padding-bottom: 10px; padding-top: 10px; text-align: justify;">Oyun içerisinde meyve ve şekerleri toplarken bazen bombalar karşınıza çıkacaktır. Bombalar çarpılmadığı sürece yok olmaz. Her bombaya çarptığınızda canınız bir eksilecektir. Oyundaki can haklarınız bittiğinde oyun son bulacaktır.</p>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" width="50%">
+                  <table style="width: 90%; border: 1px dotted #fff; text-align: center;" border="2" cellpadding="3">
+                    <tr>
+                      <td style="padding: 10px;">Bomba</td>
+                      <td style="padding: 10px;">Süre (saniye)</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/bomb.png" style="width: 40px;"></td>
+                      <td>6</td>
+                    </tr>
+                  </table>
+                </td>
+                <td align="center" width="50%">
+                  <table style="width: 90%; border: 1px dotted #fff; text-align: center;" border="2" cellpadding="3">
+                    <tr>
+                      <td style="padding: 10px;">Can</td>
+                      <td style="padding: 10px;">Hak</td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/heart.png" style="width: 40px;"></td>
+                      <td>3</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <h3 style="text-align: center;">Oynanış</h3>
+                  <p style="font-size: 15px; padding: 20px; padding-bottom: 10px; padding-top: 10px; text-align: justify;">Karakterinizi hareket ettirmek için klavyenin yön tuşlarını kullanabilirsiniz.</p>
+                  <p style="padding-left: 10px;"><img src="images/klavye.png" style="width: 300px;"></p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+
+  <script>
+
+    // Tanıtım yazısından sonra oyunun butona basılınca gösterilmesi yazının kaybolması ile ilgili kısım
+
+    function oyunuGoster() {
+
+      document.getElementById("tanitim").remove();
+      document.getElementById("oyun").style.display = "block";//butona tıklayınca oyun gösterilir
+
+    }
+
+    // Karakterlerimizin rekorlarını skor tablosuna işliyoruz.
+
+    document.getElementById("puan_0").innerHTML = Number(0+getCookie('puan_0'));
+    document.getElementById("puan_1").innerHTML = Number(0+getCookie('puan_1'));
+    document.getElementById("puan_2").innerHTML = Number(0+getCookie('puan_2'));
+
+    var puan = 0; // Topladıklarımızdan kazandığımız skoru tutar.
+    var level = 1; // Topladığımız puana göre artan seviye değerimiz.
+    var karakterID = 0; // Seçtiğimiz karakterin ID değerini tutar.
+    var oyunBittimi = false; // Karakterimizin yanıp yanmadığını kontrol eder.
+    var canSayisi = 3; // Karakterimizin en fazla kaç bombaya çarpabileceğini belirtir.
+    var x = 50; // Yatay Konumumuzu Tutar
+    var y = 50; // Dikey Konumumuzu Tutar
+    var size = 70; // Toplanacak şeylerin büyüklük değeridir.
+    var karakterSecSize = 70; // Karakter seçim ekranı karakter büyüklük değeri.
+    var karakterOyunSize = 80; // Oyun içindeki karakter büyüklük değeri.
+
+    var canvas = document.getElementById("oyun");
+    var obje = canvas.getContext("2d"); // Canvas içinde 2D elemanlar oluşturmak için kullanılır
+
+    canvas.addEventListener("click", karakterSec); // Karakter seçim ekranınında tıklamaları dinliyoruz
+
+    /* Oyun İçindeki Sesler */
+
+
+    var toplamSesi = new Audio("sounds/toplandi.wav"); // Toplama Sesi
+    var bombaSesi = new Audio("sounds/bom.wav"); // Bomba Sesi
+    var muzik = new Audio("sounds/muzik.mp3"); // Oyun Müziği
+    muzik.loop = true; // Oyun Müziği Sonsuza Kadar Çalar
+    muzik.volume = 0.1; // Oyun Müziğini %10 oranında kıstık
+
+    var oyunLogosu = new Image(); // Oyunun Logosu
+    oyunLogosu.src = "images/candy-logo-min.png";
+
+    var kalp = new Image(); // Can Görseli
+    kalp.src = "images/heart.png";
+
+    var bomba = new Image(); // Bomba Görseli
+    bomba.src = "images/bomb.png";
+
+    var background = new Image(); // Arkaplan Görseli
+    background.src = "images/meyve-bg.jpg";
+
+    var aktifBombalar = []; // Ekranda oluşan bombaları tutan dizi
+    var toplanacaklar = []; // Ekrandaki toplanacak şeyler (meyve, şeker vs.)
+
+    var oyuncu = new Image(); // Oyun içerisindeki karakterimizin görseli
+
+    /* Karakter Dizimizi Oluşturuyoruz */
+
+    var karakterler = [
+      {isim: "Kerem", image: new Image()}, 
+      {isim: "Sanem", image: new Image()}, 
+      {isim: "Abdullah", image: new Image()}
+    ];
+
+    karakterler[0].image.src = "images/karakter-1.png";
+    karakterler[1].image.src = "images/karakter-2.png";
+    karakterler[2].image.src = "images/karakter-3.png";
+
+    karakterSecimEkrani();
+
+    var meyveler = [
+      {isim: "elma", puan: 10, image: new Image()},
+      {isim: "muz", puan: 20, image: new Image()},
+      {isim: "armut", puan: 30, image: new Image()},
+      {isim: "karpuz", puan: 40, image: new Image()},
+      {isim: "ananas", puan: 50, image: new Image()}
+    ];
+
+    meyveler[0].image.src = "images/elma.png";
+    meyveler[1].image.src = "images/muz.png";
+    meyveler[2].image.src = "images/armut.png";
+    meyveler[3].image.src = "images/karpuz.png";
+    meyveler[4].image.src = "images/ananas.png";
+
+    var sekerler = [
+      {isim: "seker1", puan: 30, image: new Image()},
+      {isim: "seker2", puan: 50, image: new Image()},
+      {isim: "seker3", puan: 70, image: new Image()},
+      {isim: "seker4", puan: 90, image: new Image()},
+      {isim: "seker5", puan: 120, image: new Image()}
+    ];
+
+    sekerler[0].image.src = "images/seker-1.png";
+    sekerler[1].image.src = "images/seker-2.png";
+    sekerler[2].image.src = "images/seker-3.png";
+    sekerler[3].image.src = "images/seker-4.png";
+    sekerler[4].image.src = "images/seker-5.png";
+
+    /* Yön Tuşlarının Tıklanıp Tıklanmadığını Tutan Değişkenler */
+
+    var sol = false;
+    var sag = false;
+    var yukari = false;
+    var asagi = false;
+
+    document.addEventListener("keydown", yonTuslariTiklandi, false);
+    document.addEventListener("keyup", yonTuslariBirakildi, false);
+
+    /* Karakter seçim ekranı fonksiyonumuzda karakterler dizimizde tanımladığımız karakterlerimizi listeliyoruz. */
+
+    function karakterSecimEkrani() {
+
+      obje.clearRect(0, 0, canvas.width, canvas.height); // Canvasımızdaki tüm şeyleri temizliyoruz.
+
+      /* Logo Ayarları */
+
+      var paddingTop = 50; // Logomuz için 50px üstten boşluk bırakıyoruz.
+      var logoWidth = 500; // Logo genişliği
+      var logoHeight = oyunLogosu.height * (logoWidth / oyunLogosu.width);
+      obje.drawImage(oyunLogosu, canvas.width / 2 - logoWidth / 2, paddingTop, logoWidth, logoHeight);
+
+      /* Karakter Seçim Bilgisi Yazı Ayarları */
+
+      obje.font = "15px Arial";
+      obje.fillStyle = "white";
+
+      var karakterSecinizAciklama = "Lütfen Karakter Seçiniz";
+      var yaziGenisligi = obje.measureText(karakterSecinizAciklama).width; // Yazımızın genişliğini ölçüyoruz
+      var paddingBottom = 20;
+
+      obje.fillText(karakterSecinizAciklama, canvas.width / 2 - yaziGenisligi / 2, paddingTop + logoHeight + paddingBottom);
+
+      /* Canvasın merkez noktasını ve karakterlerin yerleştirileceği konumu belirliyoruz */
+
+      var merkez_x = canvas.width / 2;
+      var merkez_y = canvas.height / 2;
+      var konum = (karakterler.length * (karakterSecSize + 10)) / 2;
+
+      /* Karakterler dizisindeki elemanları sıralıyoruz */
+
+      for (var i = 0; i < karakterler.length; i++) {
+
+        var karakter = karakterler[i];
+        var x = merkez_x - konum + i * (karakterSecSize + 10);
+        var y = merkez_y - karakterSecSize / 2;
+
+        obje.drawImage(karakter.image, x, y, karakterSecSize, karakterSecSize);
+        var yaziGenisligi = obje.measureText(karakter.isim).width;
+        obje.fillText(karakter.isim, x + (karakterSecSize - yaziGenisligi) / 2, y + karakterSecSize + 20);
+
+      }
+
+    }
+
+    function karakterSec(event) {
+
+      var rect = canvas.getBoundingClientRect(); // Canvasın konumunu alır
+
+      /* Fare tıklamasının canvas üzerindeki konumunu belirledik */
+
+      var x = event.clientX - rect.left; 
+      var y = event.clientY - rect.top;
+
+      /* Canvasın merkez noktasını belirliyoruz */
+
+      var merkez_x = canvas.width / 2;
+      var merkez_y = canvas.height / 2;
+
+      var konum = (karakterler.length * (size + 10)) / 2;
+
+      /* Karakterler dizisindeki her karakteri listeliyoruz */
+
+      for (var i = 0; i < karakterler.length; i++) {
+
+        var karakter_x = merkez_x - konum + i * (size + 10);
+        var karakter_y = merkez_y - size / 2;
+
+        if (x > karakter_x && x < karakter_x + size && y > karakter_y && y < karakter_y + size){
+
+          oyuncu.src = karakterler[i].image.src;
+          karakterID = i;
+          canvas.removeEventListener("click", karakterSec); // Tıklama dinlemesini kaldırıyoruz
+
+          oyun(); // Tıklayınca oyunu başlatıyoruz.
+
+          break;
+
+        }
+
+      }
+
+    }
+
+    function yonTuslariTiklandi(event) {
+
+      if (event.key === "ArrowLeft")
+        sol = true;
+      else if (event.key === "ArrowRight")
+        sag = true;
+      else if (event.key === "ArrowUp")
+        yukari = true;
+      else if (event.key === "ArrowDown")
+        asagi = true;
+
+    }
+
+    function yonTuslariBirakildi(event) {
+
+      if (event.key === "ArrowLeft")
+        sol = false;
+      else if (event.key === "ArrowRight")
+        sag = false;
+      else if (event.key === "ArrowUp")
+        yukari = false;
+      else if (event.key === "ArrowDown")
+        asagi = false;
+
+    }
+
+    /* Karakter Seçtikten Sonra Başlatılacak Oyun Ekranı */
+
+    function oyun() {
+
+      muzik.play(); // Müziği Başlatıyoruz
+
+      setInterval(function() {
+
+        // Burada her saniye rastgele konumlarda seviyeye göre meyveler ve şekerler oluşturur.
+
+        var items;
+
+        if (level === 1) { // Seviye 1 Toplanacaklar Dizisi
+          items = meyveler;
+        }else if(level === 2){ // Seviye 2 Toplanacaklar Dizisi
+          items = sekerler;
+        }
+
+        var itemIndex = Math.floor(Math.random() * items.length);
+        var item = items[itemIndex];
+        var x = Math.random() * (canvas.width - size);
+        var y = Math.random() * (canvas.height - size);
+
+        toplanacaklar.push({
+          toplanacak: item, 
+          x: x, 
+          y: y, 
+          baslangicZamani: Date.now()
+        });
+
+      }, 1000);
+
+      setInterval(function() {
+
+        // Burada her 6 saniyede bir rastgele bir konumda bomba oluşturuluyor.
+
+        var x = Math.random() * (canvas.width - size);
+        var y = Math.random() * (canvas.height - size);
+
+        aktifBombalar.push({ 
+          x: x, 
+          y: y, 
+          baslangicZamani: Date.now() 
+        });
+
+      }, 6000);
+
+      function cizim() {
+
+        obje.drawImage(background, 0, 0, canvas.width, canvas.height); // Arkaplan görselimizi ayarlıyoruz
+
+        // toplanacaklar dizimizdeki şeker ve meyveleri konumlarına göre listeliyoruz.
+
+        for (var i = 0; i < toplanacaklar.length; i++) {
+
+          var aktifToplanacak = toplanacaklar[i];
+          obje.drawImage(aktifToplanacak.toplanacak.image, aktifToplanacak.x, aktifToplanacak.y, size, size);
+
+        }
+
+        // aktifBombalar dizimizdeki bombaları konumlarına göre listeliyoruz.
+
+        for (var i = 0; i < aktifBombalar.length; i++) {
+
+          var aktifBomba = aktifBombalar[i];
+          obje.drawImage(bomba, aktifBomba.x, aktifBomba.y, size, size);
+
+        }
+
+        // Ekranın sağ üst köşesinde can sayısı kadar kalp görseli oluşturur.
+
+        for (var i = 0; i < canSayisi; i++) {
+          
+          obje.drawImage(kalp, canvas.width - (i + 1) * 40, 10, 30, 30);
+
+        }
+
+        obje.font = "24px Arial";
+        obje.fillStyle = "white";
+        obje.fillText(karakterler[karakterID].isim, 10, 30);
+        obje.fillText("Puan: " + puan, 10, 60);
+        obje.fillText("Seviye: " + level, 10, 90);
+        obje.fillText("Rekor: " + Number(0+getCookie('puan_'+karakterID)), 10, 120);
+
+        obje.drawImage(oyuncu, x, y, karakterOyunSize, karakterOyunSize);
+
+      }
+
+      function hareketEtme() {
+
+        if(sol) {
+
+          x -= 5; // Sola 5 Birim Gider
+          x = (x < 0) ? 0 : x ;
+
+        }else if(sag) {
+
+          x += 5; // Sağa 5 Birim Gider
+          x = (x + size > canvas.width) ? canvas.width - size : x;
+
+        }
+
+        if(yukari) {
+
+          y -= 5; // Aşağı 5 Birim Gider
+          y = (y < 0) ? 0 : y;
+
+        }else if(asagi) {
+
+          y += 5; // Yukarı 5 Birim Gider
+          y = (y + size > canvas.height) ? canvas.height - size : y;
+
+        }
+
+      }
+
+      function oyunDongusu() {
+
+        cizim();
+        hareketEtme();
+
+        for (var i = toplanacaklar.length - 1; i >= 0; i--) {
+
+          var aktifToplanacak = toplanacaklar[i];
+
+          // Toplanacaklar oluşturma zamanından sonra 7 saniye geçtiyse siliniyor
+
+          if (Date.now() - aktifToplanacak.baslangicZamani > 7000) 
+            toplanacaklar.splice(i, 1);
+
+        }
+
+        for (var i = toplanacaklar.length - 1; i >= 0; i--) { // Toplanacakları Listeliyoruz
+
+          var aktifToplanacak = toplanacaklar[i];
+
+          if (x < aktifToplanacak.x + size && x + size > aktifToplanacak.x && y < aktifToplanacak.y + size && y + size > aktifToplanacak.y) {
+
+            /* Burada aktifToplanacak konumu ve karakterimizin konumu çakışıyorsa puan toplanmış olur. Puan değeri arttırılır ve toplama için ses çalınır ayrıca toplanacaklar dizisinden bu elemanı sileriz. */
+
+            puan += aktifToplanacak.toplanacak.puan;
+
+            toplamSesi.play();
+            toplanacaklar.splice(i, 1);
+
+          }
+
+        }
+
+        for (var i = 0; i < aktifBombalar.length; i++) {
+
+          var aktifBomba = aktifBombalar[i];
+
+          if (x < aktifBomba.x + size && x + size > aktifBomba.x && y < aktifBomba.y + size && y + size > aktifBomba.y) {
+
+            /* Burada aktifBoma konumu ve karakterimizin konumu çakışıyorsa bombaya çarpılmış olur. Can değerimiz 1 azaltılır ve çarpma için ses çalınır ayrıca aktifBombalar dizisinden bu elemanı sileriz. */
+
+            canSayisi--; // 
+            bombaSesi.play();
+            aktifBombalar.splice(i, 1);
+            
+            if (canSayisi === 0) { // Eğer can sayımız 0 olduysa oyunu bitireceğiz
+
+              if (!oyunBittimi) { // Oyun daha önceden bitmemişse oyunu bitiriyoruz çünkü yandık
+
+                oyunBittimi = true; // Bug olmaması için bu değeri true yapıyoruz
+
+                /* Skoru Eğer Rekordan Büyükse Cookie Olarak Kaydediyoruz */
+
+                var puanCookie = getCookie('puan_' + karakterID); // Karakterimizin Rekor Çerezi
+
+                if(puanCookie < puan || puanCookie == ""){
+
+                  var tarih = new Date();
+                  tarih.setTime(tarih.getTime() + (365 * 24 * 60 * 60 * 1000)); // Rekorun Kayıtlı Kalma Süresi (365 gün)
+                  document.cookie = "puan_" + karakterID + "=" + puan + "; expires= " + tarih.toUTCString() + "; path=/";
+
+                }
+
+                alert("Yandın! :( Topladığın Puan: " + puan);
+
+                document.location.reload(); // Sayfayı yeniliyoruz
+
+              }
+
+              break;
+
+            }
+
+          }
+
+        }
+
+        if (puan >= 1000 && level === 1) { 
+
+          /* Eğer 1000 puan topladıysak ve seviye 1 ise seviyeyi 2 olarak ve arkaplanı uygun bir şekilde güncelliyoruz */
+
+          level = 2;
+          background.src = "images/seker-bg.jpg";
+
+        }
+
+        requestAnimationFrame(oyunDongusu);
+
+      }
+
+      oyunDongusu();
+
+    };
+
+    // Aşağıdaki kodu internetten buldum çerezlerden veri çekmemize yarıyor
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+  </script>
+
+</body>
+</html>
